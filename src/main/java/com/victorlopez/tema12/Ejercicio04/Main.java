@@ -31,7 +31,9 @@ public class Main {
         Long tiempoMod = f.lastModified();
         String pattern = "yyyy-MM-dd hh:mm aa";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date fechaModificacion = new Date(tiempoMod );
+        Date fechaModificacion = new Date(tiempoMod);
+        System.out.println( "El fichero fue modificado por última vez el " + simpleDateFormat.format(fechaModificacion));
+        f.setLastModified(new Date().getTime());
         System.out.println( "El fichero fue modificado por última vez el " + simpleDateFormat.format(fechaModificacion));
         System.out.println("El fichero ocupa " + sizeBytes + " bytes");
         System.out.println("El fichero ocupa " + (float)sizeBytes/1024 + " MB");

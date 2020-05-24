@@ -14,5 +14,10 @@ public class Main {
         }
         GestionArchivos.listarDirectorio(PATH + File.separator + "lenguaje de marcas");
         GestionArchivos.verInfo(PATH, "lenguaje de marcas");
+        System.out.println("Contenido archivo prueba1.txt");
+        GestionArchivos.mostrarArchivo(PATH, "prueba1.txt");
+        System.out.println("Archivo binario a hexadecimal");
+        GestionArchivos.mostrarArchivoHexadecimal(PATH, "binario1");
+
     }
 }
