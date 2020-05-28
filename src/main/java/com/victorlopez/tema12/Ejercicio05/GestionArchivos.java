@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class GestionArchivos {
-    private static HashMap<Byte, Character> binarioHexadecimal;
+    private static HashMap<String, Character> binarioHexadecimal;
     public GestionArchivos() {
         //No interesa crear instancias!!
     }
@@ -59,11 +59,19 @@ public class GestionArchivos {
      * @param archivo archivo a leer
      */
     public static void mostrarArchivo(String directorio, String archivo){
+        mostrarArchivo(directorio + archivo);
+    }
+    /**
+     * Método para leer un el contenido de un fichero de texto
+     * @param ruta ruta del fichero
+     */
+    public static void mostrarArchivo(String ruta){
         int numCaracter;
         boolean fin = false;
+        FileReader fr = null;
         try{
-            FileReader fr = new FileReader(directorio + File.separator + archivo);
-            System.out.println("Contenido del fichero " + archivo + ":");
+            fr = new FileReader(ruta);
+            System.out.println("Contenido del fichero " + ruta + ":");
             do{
                 numCaracter = fr.read();
                 if (numCaracter == -1){
@@ -74,43 +82,16 @@ public class GestionArchivos {
                 }
             }while (!fin);
             System.out.println();
-            fr.close();
         }catch (IOException ieo){
             System.out.println("No se ha encontrado el fichero");
+        }finally {
+            try{
+                if (fr != null){
+                    fr.close();
+                }
+            }catch (IOException ioe){
+            }
         }
-    }
-    private static void rellenarHashmap(){
-        binarioHexadecimal = new HashMap<>();
-        byte b1 = (byte)0000;
-        byte b2 = (byte)0001;
-        byte b3 = (byte)0010;
-        byte b4 = (byte)0011;
-        byte b5 = (byte)0100;
-        byte b6 = (byte)0101;
-        byte b7 = (byte)0111;
-        byte b8 = (byte)1000;
-        byte b9 = (byte) 1001;
-        byte b10 = (byte)1010;
-        byte b11 = (byte)1011;
-        byte b12 = (byte)1100;
-        byte b13 = (byte)1101;
-        byte b14 = (byte)1110;
-        byte b15 = (byte)1111;
-        binarioHexadecimal.put(b1, '0');
-        binarioHexadecimal.put(b2, '1');
-        binarioHexadecimal.put(b3, '2');
-        binarioHexadecimal.put(b4, '3');
-        binarioHexadecimal.put(b5, '4');
-        binarioHexadecimal.put(b6, '5');
-        binarioHexadecimal.put(b7, '6');
-        binarioHexadecimal.put(b8, '7');
-        binarioHexadecimal.put(b9, '8');
-        binarioHexadecimal.put(b10, '9');
-        binarioHexadecimal.put(b11, 'A');
-        binarioHexadecimal.put(b12, 'B');
-        binarioHexadecimal.put(b13, 'C');
-        binarioHexadecimal.put(b14, 'D');
-        binarioHexadecimal.put(b15, 'E');
     }
     /**
      * Método para leer un el contenido de un fichero binario
@@ -119,37 +100,44 @@ public class GestionArchivos {
      * @param archivo archivo a leer
      */
     public static void mostrarArchivoHexadecimal(String directorio, String archivo){
-        int numsCaracter;
+        int numByte;
+        FileInputStream fr = null;
         boolean fin = false;
-        String hexadecimal = "";
-        rellenarHashmap();
+        int contador = 0;
+        String hexadecimal;
         try {
-            FileInputStream fr = new FileInputStream(directorio + File.separator + archivo);
-            byte[] bytes = new byte[4];
-            try {
-                numsCaracter = fr.read(bytes);
-                hexadecimal += binarioHexadecimal.get(numsCaracter);
-                System.out.printf(hexadecimal);
-            }catch (IOException ioe){
+            fr = new FileInputStream(directorio + File.separator + archivo);
+                do {
+                    if (fr.available() >= 1){
+                        contador++;
+                        numByte = fr.read();
+                        hexadecimal = String.format("%-02X ", numByte);
+                        System.out.printf(hexadecimal);
+                        if (contador == 22){
+                            contador = 0;
+                            System.out.println();
+                        }
+                    }else{
+                        System.out.println("\nCerrando fichero...");
+                        fin = true;
+                    }
+                }while (!fin);
+        }catch (FileNotFoundException fnfe){
                 System.out.println("No se ha podido leer");
-            }
-        }catch(FileNotFoundException fnfe){
+                fnfe.printStackTrace();
+        } catch(IOException ioe) {
             System.out.println("Fichero no encontrado");
-        }
-    }
-    private static char convertirBinarioHexacedimal(int numsCaracter){
-        String digitosHexa = "0123456789ABCDEF";
-        char hexadecimal = ' ';
-        int contador = 1000;
-        for (int i = 0; i < digitosHexa.length(); i++) {
-            if (numsCaracter == contador){
-                hexadecimal = digitosHexa.charAt(i);
+            ioe.printStackTrace();
+        }finally {
+            if (fr != null){
+                try{
+                    fr.close();
+                }catch (IOException ioe){
+                    ioe.printStackTrace();
+                }
             }
-            contador++;
         }
-        return hexadecimal;
     }
-
     /**
      * visualizará el nombre, la ruta absoluta, si se
      * puede escribir, si se puede leer, el tamaño, si es un directorio y si es un archivo.

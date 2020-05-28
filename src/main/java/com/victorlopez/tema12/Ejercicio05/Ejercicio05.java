@@ -3,7 +3,7 @@ package com.victorlopez.tema12.Ejercicio05;
 import java.io.File;
 
 
-public class Main {
+public class Ejercicio05 {
     public static final String PATH = File.separator + "home" + File.separator + "victor" + File.separator + "tema12";
     public static void main(String[] args) {
         boolean creado = GestionArchivos.crearArchivo(PATH, "pruebaEjer5.txt");
@@ -17,7 +17,7 @@ public class Main {
         System.out.println("Contenido archivo prueba1.txt");
         GestionArchivos.mostrarArchivo(PATH, "prueba1.txt");
         System.out.println("Archivo binario a hexadecimal");
-        GestionArchivos.mostrarArchivoHexadecimal(PATH, "binario1");
+        GestionArchivos.mostrarArchivoHexadecimal("/usr/bin", "top");
 
     }
 }

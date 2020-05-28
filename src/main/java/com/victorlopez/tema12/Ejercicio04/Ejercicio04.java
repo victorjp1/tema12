@@ -4,7 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Main {
+public class Ejercicio04 {
     public static final String PATH = File.separator + "home" + File.separator + "victor" + File.separator + "tema12";
     public static void main(String[] args) {
         File f = new File(PATH, "prueba1.txt");
